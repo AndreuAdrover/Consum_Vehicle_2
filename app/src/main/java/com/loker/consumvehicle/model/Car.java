@@ -1,5 +1,10 @@
 package com.loker.consumvehicle.model;
 
+import android.util.Log;
+
+import java.sql.Ref;
+import java.util.List;
+
 public class Car {
 
     private String carName;
@@ -53,5 +58,48 @@ public class Car {
 
     public void setInicialKm(float inicialKm) {
         this.inicialKm = inicialKm;
+    }
+
+    //return de kms since we start to using the app
+    public float calcKmsLogged(){
+        return totalKm-inicialKm;
+    }
+
+    public float getTotalLitres(List<Refill> refills){
+        float totalLitres = 0;
+        for(Refill refill: refills){
+            if(refill.getCarName().equals(carName)){
+                totalLitres=totalLitres+refill.getLitres();
+            }
+        }
+        return totalLitres;
+    }
+    public float getTotalEuros(List<Refill> refills){
+        float totalEuros = 0;
+        for(Refill refill: refills){
+            if(refill.getCarName().equals(carName)){
+                totalEuros+=refill.getPrice();
+            }
+        }
+        return totalEuros;
+    }
+
+    public float getAVGLitres(List<Refill> refills){
+        float avgLitres = 0;
+
+        float totalKm = calcKmsLogged();
+        float totalLitres = getTotalLitres(refills);
+        if(totalKm>0)
+            avgLitres =(totalLitres/totalKm)*100;
+        return avgLitres;
+    }
+
+    public float getAVGEuros(List<Refill> refills){
+        float avgEuros = 0;
+        float totalEuros = getTotalEuros(refills);
+        float totalKm =  calcKmsLogged();
+        if(totalKm>0)
+            avgEuros = (totalEuros/totalKm)*100;
+        return avgEuros;
     }
 }
