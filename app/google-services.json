@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "927883659370",
+    "firebase_url": "https://consum-vehicle.firebaseio.com",
+    "project_id": "consum-vehicle",
+    "storage_bucket": "consum-vehicle.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:927883659370:android:e7dcb24743599c4e",
+        "android_client_info": {
+          "package_name": "com.loker.cosumvehicle"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "927883659370-vtma95fbkfje1q6snaheoq672sc3j72v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAAIFS0kKX63E5SceZULnmVxTXR7OoD6Gw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "927883659370-vtma95fbkfje1q6snaheoq672sc3j72v.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

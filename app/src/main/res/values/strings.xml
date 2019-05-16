@@ -1,0 +1,64 @@
+<resources>
+    <string name="app_name">ConsumVehicle</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
+    <string name="menu_tools">Tools</string>
+    <string name="menu_share">Share</string>
+    <string name="menu_send">Send</string>
+
+    <string name="title_activity_sign_in">Sign in</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="welcome">"Welcome !"</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"Login failed"</string>
+    <string name="action_sign_up">Create a new account</string>
+    <string name="action_sign_up_short">Register</string>
+    <string name="action_sign_out">Sign Out</string>
+
+    <string name="title_activity_add_car">Add a new car</string>
+    <string name="activity_add_car_carName">Car Name:</string>
+    <string name="activity_add_car_carName_hint">Insert a name for the car</string>
+    <string name="activity_add_car_kms">Kms on clock:</string>
+    <string name="activity_add_car_kms_hint">insert the kms on clock</string>
+    <string name="activity_add_car_litres">Litres refilled:</string>
+    <string name="activity_add_car_litres_hint">insert litres refilled</string>
+    <string name="activity_add_car_button">Add new car</string>
+    <string name="invalid_name_car">Invalid name car</string>
+    <string name="invalid_kms_value">Invalid Kms value</string>
+    <string name="invalid_litres_value">Invalid litres value</string>
+    <string name="title_car_list_car_name">Car name</string>
+    <string name="confirmar_borrar_Title_Dialog">Delete Car</string>
+    <string name="confirmar_borrar_Message_Dialog">Are you sure you want to delete</string>
+
+    <string name="title_activity_refill_list">Refills of</string>
+    <string name="type_of_fuel">Type of fuel:</string>
+    <string name="label_kms_on_the_clock">Kms on the clock:</string>
+    <string name="litres_rifilled">Litres refilled:</string>
+    <string name="tv_price">Price:</string>
+
+
+    <string name="title_activity_add_refill">Add a Refill for</string>
+    <string name="activity_add_refill_button">Add refill</string>
+    <string name="tv_type_of_fuel">Type of fuel</string>
+    <string name="tv_label_date">Date:</string>
+    <string name="tv_label_price">Price:</string>
+    <string name="tv_lable_litres">Litres:</string>
+    <string name="tv_label_KmsOnClock">Kms on Clock:</string>
+    <string name="rb_label_gasoline">Gasoline</string>
+    <string name="rb_label_diesel">Diesel</string>
+    <string name="rb_label_glp">GLP</string>
+    <string name="rb_label_gnc">GNC</string>
+
+</resources>

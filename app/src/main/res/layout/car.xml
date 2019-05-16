@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:baselineAligned="false"
+    android:orientation="horizontal">
+    <!--
+    <ImageView
+        android:id="@+id/foto_xisme"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        app:srcCompat="@drawable/ic_add_photo"
+        android:contentDescription="@string/photo_of_xisme_text"/>
+        -->
+    <android.support.constraint.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/car_layout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:background="@color/common_google_signin_btn_text_dark_disabled"
+        android:layout_weight="4">
+
+        <TextView
+            android:id="@+id/tv_carName"
+            style="@style/Base.TextAppearance.AppCompat.Subhead"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="38dp"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:text="car name"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/tv_kms"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="68dp"
+            android:text="000000"
+            app:layout_constraintBaseline_toBaselineOf="@id/tv_carName"
+            app:layout_constraintLeft_toRightOf="@id/tv_carName" />
+
+
+    </android.support.constraint.ConstraintLayout>
+    <android.support.constraint.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/carMenu_layout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:background="@color/common_google_signin_btn_text_dark_disabled"
+        android:layout_weight="1">
+    <TextView
+        android:id="@+id/ic_itemMenu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:paddingStart="32dp"
+        android:paddingLeft="32dp"
+        android:paddingEnd="32dp"
+        android:paddingRight="32dp"
+        android:paddingBottom="16dp"
+        android:paddingTop="16dp"
+        android:text="&#8942;"
+        style="@style/TextAppearance.AppCompat.Subhead"/>
+    </android.support.constraint.ConstraintLayout>
+
+
+</LinearLayout>

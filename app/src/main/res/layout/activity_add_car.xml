@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.loker.consumvehicle.activities.AddCarActivity">
+
+
+    <TextView
+        android:id="@+id/tv_carName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/activity_add_car_carName"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="96dp"
+        android:layout_marginEnd="24dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+    <EditText
+        android:id="@+id/et_carName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="text"
+        app:layout_constraintBaseline_toBaselineOf="@id/tv_carName"
+        app:layout_constraintLeft_toRightOf="@+id/tv_carName"
+        android:hint="@string/activity_add_car_carName_hint"/>
+    <TextView
+        android:id="@+id/tv_kms"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/activity_add_car_kms"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="24dp"
+        app:layout_constraintTop_toBottomOf="@+id/tv_carName"
+        app:layout_constraintStart_toStartOf="parent"/>
+    <EditText
+        android:id="@+id/et_kms"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="numberDecimal"
+        app:layout_constraintBaseline_toBaselineOf="@id/tv_kms"
+        app:layout_constraintLeft_toRightOf="@+id/tv_kms"
+        android:hint="@string/activity_add_car_kms_hint"/>
+
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/tv_kms"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="24dp"
+        app:layout_constraintStart_toStartOf="parent"
+        android:text="@string/activity_add_car_button"
+        android:onClick="addNewCar"
+        />
+
+
+
+
+
+</android.support.constraint.ConstraintLayout>
