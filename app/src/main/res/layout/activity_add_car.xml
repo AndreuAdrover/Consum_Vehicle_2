@@ -13,9 +13,9 @@
         android:layout_height="wrap_content"
         android:text="@string/activity_add_car_carName"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="96dp"
+        android:layout_marginTop="24dp"
         android:layout_marginEnd="24dp"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/imageCar"
         app:layout_constraintStart_toStartOf="parent"/>
     <EditText
         android:id="@+id/et_carName"
@@ -44,11 +44,37 @@
         app:layout_constraintLeft_toRightOf="@+id/tv_kms"
         android:hint="@string/activity_add_car_kms_hint"/>
 
+    <TextView
+        android:id="@+id/tv_label_estimate_liters_in_the_deposit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/activity_add_car_label_litres_in_deposit"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="24dp"
+        app:layout_constraintTop_toBottomOf="@+id/tv_kms"
+        app:layout_constraintStart_toStartOf="parent"/>
+    <EditText
+        android:id="@+id/et_litres_deposit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="numberDecimal"
+        app:layout_constraintBaseline_toBaselineOf="@id/tv_label_estimate_liters_in_the_deposit"
+        app:layout_constraintLeft_toRightOf="@+id/tv_label_estimate_liters_in_the_deposit"
+        android:text="30"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        app:layout_constraintBaseline_toBaselineOf="@id/tv_label_estimate_liters_in_the_deposit"
+        app:layout_constraintLeft_toRightOf="@+id/et_litres_deposit"
+        android:text="L"/>
+
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/tv_kms"
+        app:layout_constraintTop_toBottomOf="@id/tv_label_estimate_liters_in_the_deposit"
         android:layout_marginStart="24dp"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="24dp"
@@ -56,6 +82,18 @@
         android:text="@string/activity_add_car_button"
         android:onClick="addNewCar"
         />
+
+    <ImageView
+        android:id="@+id/imageCar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="24dp"
+        android:layout_marginTop="24dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:onClick="addImageCar"
+        android:src="@android:drawable/ic_menu_camera"
+        android:contentDescription="add an image for the car"/>
 
 
 

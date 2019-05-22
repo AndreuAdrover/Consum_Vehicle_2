@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ConsumVehicle</string>
+    <string name="app_name">Car Consumption</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Android Studio</string>
@@ -41,6 +41,13 @@
     <string name="title_car_list_car_name">Car name</string>
     <string name="confirmar_borrar_Title_Dialog">Delete Car</string>
     <string name="confirmar_borrar_Message_Dialog">Are you sure you want to delete</string>
+    <string name="carxml_label_car_name">Car name:</string>
+    <string name="carxml_label_kmOnClock">Kms on Clock:</string>
+    <string name="carxml_label_on_log">Kms since using the app:</string>
+    <string name="carxml_label_totallitres">Total litres refilled:</string>
+    <string name="carxml_label_euros">Total € spent:</string>
+    <string name="carxml_label_Lto100km">L/100km:</string>
+    <string name="carxml_label_euros100km">€/100Km:</string>
 
     <string name="title_activity_refill_list">Refills of</string>
     <string name="type_of_fuel">Type of fuel:</string>
@@ -53,6 +60,7 @@
     <string name="activity_add_refill_button">Add refill</string>
     <string name="tv_type_of_fuel">Type of fuel</string>
     <string name="tv_label_date">Date:</string>
+    <string name="click_to_change_the_default_date_is">Click to change</string>
     <string name="tv_label_price">Price:</string>
     <string name="tv_lable_litres">Litres:</string>
     <string name="tv_label_KmsOnClock">Kms on Clock:</string>
@@ -60,5 +68,9 @@
     <string name="rb_label_diesel">Diesel</string>
     <string name="rb_label_glp">GLP</string>
     <string name="rb_label_gnc">GNC</string>
+    <string name="activity_add_car_label_litres_in_deposit">Estimated inicial litres in the tank</string>
+    <string name="check_all">All</string>
+    <string name="activity_add_car_button_imageCar">Add image Car</string>
+
 
 </resources>

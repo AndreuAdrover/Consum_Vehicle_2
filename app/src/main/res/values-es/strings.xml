@@ -1,0 +1,77 @@
+<resources>
+    <string name="app_name">Consumo del Vehículo</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Configuración</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
+    <string name="menu_tools">Tools</string>
+    <string name="menu_share">Share</string>
+    <string name="menu_send">Send</string>
+
+    <string name="title_activity_sign_in">Sign in</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Constraseña</string>
+    <string name="action_sign_in">Entrar o Registro</string>
+    <string name="action_sign_in_short">Entrar</string>
+    <string name="welcome">"Bienvenido"</string>
+    <string name="invalid_username">Usuario incorrecto</string>
+    <string name="invalid_password">Cotraseña iincorrecta</string>
+    <string name="login_failed">"Login failed"</string>
+    <string name="action_sign_up">Crear una cuenta nueva</string>
+    <string name="action_sign_up_short">Regitro</string>
+    <string name="action_sign_out">Salir de usuario</string>
+
+    <string name="title_activity_add_car">Añadir vehículo</string>
+    <string name="activity_add_car_carName">Nombre del vehículo:</string>
+    <string name="activity_add_car_carName_hint">... nombre del vehículo</string>
+    <string name="activity_add_car_kms">Kms en marcador:</string>
+    <string name="activity_add_car_kms_hint">... Kms</string>
+    <string name="activity_add_car_litres">Litros repostados:</string>
+    <string name="activity_add_car_litres_hint">inserte litros</string>
+    <string name="activity_add_car_button">Añadir</string>
+    <string name="invalid_name_car">Nombre incorrecto</string>
+    <string name="invalid_kms_value">Valor de kms incorrecto</string>
+    <string name="invalid_litres_value">Valor de litros incorrecto</string>
+    <string name="title_car_list_car_name">Nombre del coche</string>
+    <string name="confirmar_borrar_Title_Dialog">Borrar Coche</string>
+    <string name="confirmar_borrar_Message_Dialog">Quiere borrar el vehículo</string>
+    <string name="carxml_label_car_name">Nombre del coche:</string>
+    <string name="carxml_label_kmOnClock">Kms en el marcador:</string>
+    <string name="carxml_label_on_log">Kms registrados en la app:</string>
+    <string name="carxml_label_totallitres">Litros totales repostados:</string>
+    <string name="carxml_label_euros">Gasto total:</string>
+    <string name="carxml_label_Lto100km">L/100km:</string>
+    <string name="carxml_label_euros100km">€/100Km:</string>
+
+    <string name="title_activity_refill_list">Repostajes de</string>
+    <string name="type_of_fuel">Combustible:</string>
+    <string name="label_kms_on_the_clock">Kms en el marcador:</string>
+    <string name="litres_rifilled">Litros repostados:</string>
+    <string name="tv_price">Precio:</string>
+
+
+    <string name="title_activity_add_refill">Añadir repostaje para:</string>
+    <string name="activity_add_refill_button">Añadir</string>
+    <string name="tv_type_of_fuel">Combustible</string>
+    <string name="tv_label_date">Fecha:</string>
+    <string name="click_to_change_the_default_date_is">Pulsa para cambiar.</string>
+    <string name="tv_label_price">Precio:</string>
+    <string name="tv_lable_litres">Litros:</string>
+    <string name="tv_label_KmsOnClock">Kms en el marcador:</string>
+    <string name="rb_label_gasoline">Gasolina</string>
+    <string name="rb_label_diesel">Diesel</string>
+    <string name="rb_label_glp">GLP</string>
+    <string name="rb_label_gnc">GNC</string>
+    <string name="activity_add_car_label_litres_in_deposit">Litros estimados en el depósito</string>
+    <string name="check_all">Todos</string>
+    <string name="activity_add_car_button_imageCar">Añadir Imagen</string>
+
+
+
+</resources>

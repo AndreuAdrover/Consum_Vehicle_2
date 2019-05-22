@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:baselineAligned="false"
-    android:orientation="horizontal">
+    android:layout_marginTop="8dp"
+    android:orientation="vertical">
     <!--
     <ImageView
         android:id="@+id/foto_xisme"
@@ -14,58 +16,165 @@
         app:srcCompat="@drawable/ic_add_photo"
         android:contentDescription="@string/photo_of_xisme_text"/>
         -->
-    <android.support.constraint.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/car_layout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:background="@color/common_google_signin_btn_text_dark_disabled"
-        android:layout_weight="4">
-
-        <TextView
-            android:id="@+id/tv_carName"
-            style="@style/Base.TextAppearance.AppCompat.Subhead"
-            android:layout_width="wrap_content"
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <android.support.constraint.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/car_layout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="38dp"
-            android:paddingTop="16dp"
-            android:paddingBottom="16dp"
-            android:text="car name"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-        <TextView
-            android:id="@+id/tv_kms"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="68dp"
-            android:text="000000"
-            app:layout_constraintBaseline_toBaselineOf="@id/tv_carName"
-            app:layout_constraintLeft_toRightOf="@id/tv_carName" />
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:layout_marginBottom="8dp">
+            <TextView
+                android:id="@+id/tv_label_carName"
+                style="@style/Base.TextAppearance.AppCompat.Subhead"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="38dp"
+                android:text="@string/carxml_label_car_name"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+            <TextView
+                android:id="@+id/tv_carName"
+                style="@style/Base.TextAppearance.AppCompat.Subhead"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="car name"
+                app:layout_constraintBaseline_toBaselineOf="@+id/tv_label_carName"
+                app:layout_constraintStart_toEndOf="@+id/tv_label_carName" />
+            <ImageView
+                android:id="@+id/imageCar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:layout_marginTop="16dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:src="@android:drawable/ic_menu_camera"/>
+
+            <TextView
+                android:id="@+id/tv_label_kms"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginStart="24dp"
+                android:text="@string/carxml_label_kmOnClock"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_label_carName" />
+
+            <TextView
+                android:id="@+id/tv_kms"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="000000"
+                app:layout_constraintBaseline_toBaselineOf="@id/tv_label_kms"
+                app:layout_constraintStart_toEndOf="@id/tv_label_kms" />
+
+            <TextView
+                android:id="@+id/tv_label_kms_noted"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="8dp"
+                android:text="@string/carxml_label_on_log"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_label_kms" />
+
+            <TextView
+                android:id="@+id/tv_kms_noted"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="000000"
+                app:layout_constraintBaseline_toBaselineOf="@id/tv_label_kms_noted"
+                app:layout_constraintStart_toEndOf="@id/tv_label_kms_noted" />
+
+            <TextView
+                android:id="@+id/tv_label_litres"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="24dp"
+                android:layout_marginTop="16dp"
+                android:text="@string/carxml_label_totallitres"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_label_kms_noted" />
+
+            <TextView
+                android:id="@+id/tv_litres"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="000000"
+                app:layout_constraintStart_toEndOf="@id/tv_label_litres"
+                app:layout_constraintBaseline_toBaselineOf="@id/tv_label_litres" />
+
+            <TextView
+                android:id="@+id/tv_label_euros"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="8dp"
+                android:text="@string/carxml_label_euros"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_label_litres" />
+
+            <TextView
+                android:id="@+id/tv_euros"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="000000"
+                app:layout_constraintBaseline_toBaselineOf="@id/tv_label_euros"
+                app:layout_constraintStart_toEndOf="@id/tv_label_euros" />
+
+            <TextView
+                android:id="@+id/tv_label_Lto100km"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginStart="24dp"
+                android:text="@string/carxml_label_Lto100km"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_label_euros" />
+
+            <TextView
+                android:id="@+id/tv_Lto100km"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="000000"
+                app:layout_constraintStart_toEndOf="@id/tv_label_Lto100km"
+                app:layout_constraintBaseline_toBaselineOf="@id/tv_label_Lto100km" />
+
+            <TextView
+                android:id="@+id/tv_label_euros100km"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginStart="24dp"
+                android:text="@string/carxml_label_euros100km"
+                app:layout_constraintStart_toEndOf="@id/tv_Lto100km"
+                app:layout_constraintBaseline_toBaselineOf="@id/tv_label_Lto100km" />
+
+            <TextView
+                android:id="@+id/tv_euros100km"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="000000"
+                app:layout_constraintBaseline_toBaselineOf="@id/tv_label_euros100km"
+                app:layout_constraintStart_toEndOf="@id/tv_label_euros100km" />
 
 
-    </android.support.constraint.ConstraintLayout>
-    <android.support.constraint.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/carMenu_layout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:background="@color/common_google_signin_btn_text_dark_disabled"
-        android:layout_weight="1">
-    <TextView
-        android:id="@+id/ic_itemMenu"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:paddingStart="32dp"
-        android:paddingLeft="32dp"
-        android:paddingEnd="32dp"
-        android:paddingRight="32dp"
-        android:paddingBottom="16dp"
-        android:paddingTop="16dp"
-        android:text="&#8942;"
-        style="@style/TextAppearance.AppCompat.Subhead"/>
-    </android.support.constraint.ConstraintLayout>
+        </android.support.constraint.ConstraintLayout>
+
+    </android.support.v7.widget.CardView>
+
+
+
 
 
 </LinearLayout>

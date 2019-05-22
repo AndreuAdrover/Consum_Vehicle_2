@@ -6,6 +6,7 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MediatorLiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Observer;
+import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -78,7 +79,7 @@ public class CarDataViewModel extends AndroidViewModel {
             @Override
             public void onChanged(@Nullable List<Car> cars) {
 
-                if(mediatorCarList.getValue()==null) {
+                if(userCarList.getValue()==null) {
                     mediatorCarList.setValue(carDataRepository.getUserCarList().getValue());
                     Log.d("mediatorCarList","CarListChanged_null");
                 }
@@ -95,5 +96,13 @@ public class CarDataViewModel extends AndroidViewModel {
 
     public LiveData<Boolean> deleteCar(Car carToDelte) {
         return carDataRepository.deleteCar(carToDelte);
+    }
+
+    public void updateCar(Car car){
+        carDataRepository.updateCar(car);
+    }
+
+    public LiveData<Bitmap> getImageCar(Car car){
+        return carDataRepository.getCarImage(car);
     }
 }

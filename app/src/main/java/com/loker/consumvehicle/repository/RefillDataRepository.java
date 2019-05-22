@@ -4,6 +4,7 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.support.annotation.NonNull;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -13,12 +14,14 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.loker.consumvehicle.model.Car;
 import com.loker.consumvehicle.model.Refill;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class RefillDataRepository {
@@ -27,7 +30,7 @@ public class RefillDataRepository {
     private FirebaseAuth firebaseAuth;
     private FirebaseUser user;
 
-    private MutableLiveData<Boolean> addRefillSuccess = new MutableLiveData<>();
+    private MutableLiveData<Boolean> Success = new MutableLiveData<>();
     private MutableLiveData<List<Refill>> carRefillsLD = new MutableLiveData<>();
 
     public RefillDataRepository() {
@@ -44,44 +47,97 @@ public class RefillDataRepository {
 
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
-                        addRefillSuccess.setValue(true);
+                        Success.setValue(true);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Log.d("addCar",e.getMessage());
-                        addRefillSuccess.setValue(false);
+                        Success.setValue(false);
                     }
                 });
 
-        return addRefillSuccess;
+        return Success;
 
     }
 
     public LiveData<List<Refill>> getCarRefills(String carName){
+        Query query;
+        if(user!=null) {
+            if (carName == null) {
+                query = db.collection("refills").orderBy("date").whereEqualTo("uid", user.getUid());
+            } else {
+                query = db.collection("refills").orderBy("date").whereEqualTo("uid", user.getUid()).whereEqualTo("carName", carName);
+            }
 
-        db.collection("refills")
+            query.get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                List<Refill> refills = new ArrayList<>();
+                                for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
+                                    refills.add(documentSnapshot.toObject(Refill.class));
+                                }
+
+                                carRefillsLD.setValue(refills);
+
+                            } else {
+                                Log.d("getCarRefill", "Error getting documents: ", task.getException());
+                            }
+                        }
+                    });
+        }
+        else{
+            Log.d("RefillDataRepository","Error:user = null");
+        }
+
+        return carRefillsLD;
+
+    }
+
+    public void deleteCarRefills(String carName){
+        db.collection("refills").whereEqualTo("uid",user.getUid())
                 .whereEqualTo("carName",carName)
-                .whereEqualTo("uid",user.getUid())
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if(task.isSuccessful()){
-                            List<Refill> refills = new ArrayList<>();
                             for(QueryDocumentSnapshot documentSnapshot: task.getResult()){
-                                refills.add(documentSnapshot.toObject(Refill.class));
+                                documentSnapshot.getReference().delete();
                             }
-                            carRefillsLD.setValue(refills);
 
-                        } else {
-                            Log.d("getCarRefill", "Error getting documents: ", task.getException());
+                        }else{
+                            Log.d("deleteCarRefills", "Error getting documents: ", task.getException());
                         }
                     }
                 });
 
-        return carRefillsLD;
+    }
+    public LiveData<Boolean> deleteRefill(Refill refill){
+        db.collection("refills")
+                .whereEqualTo("uid",user.getUid())
+                .whereEqualTo("carName",refill.getCarName())
+                .whereEqualTo("date",refill.getDate())
+                .limit(1)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if(task.isSuccessful()){
+                            for(QueryDocumentSnapshot documentSnapshot: task.getResult()){
+                                documentSnapshot.getReference().delete();
+                            }
+                            Success.setValue(true);
+                        }else{
+                            Log.d("deleteRefill", "Error getting documents: ", task.getException());
+                            Success.setValue(false);
+                        }
+                    }
+                });
 
+        return Success;
     }
 }

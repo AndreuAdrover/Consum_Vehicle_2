@@ -1,15 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
+    android:orientation="horizontal"
+    android:layout_marginTop="8dp"
     android:layout_height="wrap_content">
+
+    <CheckBox
+        android:id="@+id/remove_check"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"/>
+
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
-
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -20,7 +26,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:text="00/00/2019"
-                android:textSize="24sp"
+                android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -31,23 +37,23 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:text="@string/type_of_fuel"
-                app:layout_constraintBaseline_toBaselineOf="@+id/tv_date"
-                app:layout_constraintRight_toLeftOf="@+id/tv_fuel_type" />
+                app:layout_constraintEnd_toStartOf="@+id/tv_fuel_type"
+                app:layout_constraintBaseline_toBaselineOf="@+id/tv_label_litres" />
 
             <TextView
                 android:id="@+id/tv_fuel_type"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
+                android:layout_marginEnd="8dp"
                 android:text="GLP"
-                app:layout_constraintBaseline_toBaselineOf="@+id/tv_date"
-                app:layout_constraintRight_toRightOf="parent" />
+                app:layout_constraintBaseline_toBaselineOf="@+id/tv_label_fuel_type"
+                app:layout_constraintEnd_toEndOf="@+id/textView7" />
 
             <TextView
                 android:id="@+id/tv_label_KmOnClock"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="8dp"
                 android:text="@string/label_kms_on_the_clock"
                 app:layout_constraintStart_toStartOf="@+id/tv_date"
                 app:layout_constraintTop_toBottomOf="@+id/tv_date" />
@@ -78,31 +84,38 @@
                 android:text="30"
                 app:layout_constraintBaseline_toBaselineOf="@+id/tv_label_litres"
                 app:layout_constraintStart_toEndOf="@+id/tv_label_litres" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Lts."
+                app:layout_constraintBaseline_toBaselineOf="@+id/tv_label_litres"
+                app:layout_constraintStart_toEndOf="@+id/tv_litres"/>
 
             <TextView
                 android:id="@+id/tv_label_price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
                 android:text="@string/tv_price"
                 app:layout_constraintBottom_toBottomOf="@+id/tv_KmOnClock"
-                app:layout_constraintStart_toStartOf="@+id/tv_label_fuel_type" />
+                app:layout_constraintEnd_toStartOf="@+id/tv_price" />
 
             <TextView
                 android:id="@+id/tv_price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
                 android:text="25,30"
-                app:layout_constraintStart_toEndOf="@+id/tv_label_price"
+                app:layout_constraintEnd_toStartOf="@+id/textView7"
                 app:layout_constraintTop_toTopOf="@+id/tv_label_price" />
 
             <TextView
                 android:id="@+id/textView7"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
+                android:layout_marginEnd="24dp"
                 android:text="€"
-                app:layout_constraintStart_toEndOf="@+id/tv_price"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/tv_price" />
 
         </android.support.constraint.ConstraintLayout>

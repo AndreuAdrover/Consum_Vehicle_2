@@ -1,24 +1,30 @@
 package com.loker.consumvehicle.activities;
 
-import android.app.ProgressDialog;
-import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 
 import com.loker.consumvehicle.R;
-import com.loker.consumvehicle.ViewModel.CarDataViewModel;
 import com.loker.consumvehicle.model.Car;
+
+import java.io.ByteArrayOutputStream;
 
 public class AddCarActivity extends AppCompatActivity {
 
-    private EditText etLitres, etKms, etCarName;
+    private static final int REQUEST_IMAGE_CAPTURE = 1;
+
+    private EditText etTankLitres, etKms, etCarName;
+
+    private ImageView imageCar;
 
     private Car newCar = new Car();
    // private CarDataViewModel carDataViewModel;
@@ -34,6 +40,8 @@ public class AddCarActivity extends AppCompatActivity {
 
         etKms = findViewById(R.id.et_kms);
         etCarName = findViewById(R.id.et_carName);
+        etTankLitres = findViewById(R.id.et_litres_deposit);
+        imageCar =  findViewById(R.id.imageCar);
 
         Intent intent = getIntent();
         if(intent.getStringExtra(MainActivity.APPUSER_UID)!=null) {
@@ -48,6 +56,7 @@ public class AddCarActivity extends AppCompatActivity {
 
     public void addNewCar(View view) {
          newCar.setCarName(String.valueOf(etCarName.getText()));
+         newCar.setTankLitres(Float.parseFloat(etTankLitres.getText().toString()));
         if(!etKms.getText().toString().isEmpty()) {
             newCar.setInicialKm(Float.parseFloat(String.valueOf(etKms.getText())));
             newCar.setTotalKm(newCar.getInicialKm());
@@ -57,6 +66,9 @@ public class AddCarActivity extends AppCompatActivity {
                 Intent reply = new Intent();
                 reply.putExtra("carName",newCar.getCarName());
                 reply.putExtra("inicialKms",newCar.getInicialKm());
+                reply.putExtra("tankLitres",newCar.getTankLitres());
+                if(newCar.getBitmapImageCar()!=null)
+                    reply.putExtra("thumbnail",getStringFromBitmap(newCar.getBitmapImageCar()));
                 setResult(RESULT_OK,reply);
                 finish();
 
@@ -69,28 +81,33 @@ public class AddCarActivity extends AppCompatActivity {
 
     }
 
-   /* private void addCar(String UID,String carName,float kms,float litres){
-        Map<String, Object> car = new HashMap<>();
-        car.put("UID",UID);
-        car.put("name", carName);
-        car.put("kms", kms);
-        car.put("litres", litres);
+    public void addImageCar(View view) {
 
-        db.collection("cars").add(car)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+            Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+            }
+    }
 
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Toast.makeText(AddCarActivity.this,"Car added",Toast.LENGTH_SHORT).show();
-                        finish();
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(AddCarActivity.this,"Error Writting the document",Toast.LENGTH_SHORT).show();
-                    }
-                });
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            imageCar.setImageBitmap(imageBitmap);
+            newCar.setBitmapImageCar(imageBitmap);
 
-    }*/
+        }
+    }
+    private String getStringFromBitmap(Bitmap bitmapPicture) {
+        final int COMPRESSION_QUALITY = 100;
+        String encodedImage;
+        ByteArrayOutputStream byteArrayBitmapStream = new ByteArrayOutputStream();
+        bitmapPicture.compress(Bitmap.CompressFormat.PNG, COMPRESSION_QUALITY,
+                byteArrayBitmapStream);
+        byte[] b = byteArrayBitmapStream.toByteArray();
+        encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
+        return encodedImage;
+    }
 }
