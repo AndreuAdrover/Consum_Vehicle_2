@@ -70,23 +70,9 @@ public class CarDataRepository {
         newCar.setTotalKm(newCar.getInicialKm());
         //newCar.setUrlImageCar(storage.getReference().getBucket()+"/"+newCar.getCarName()+"_img");
 
-       db.collection("cars").add(newCar)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        addCarSuccess.setValue(true);
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.d("addCar",e.getMessage());
-                        addCarSuccess.setValue(false);
-                    }
-                });
-
         if(newCar.getBitmapImageCar()!=null) {
+
+            //upload the image Car
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             newCar.getBitmapImageCar().compress(Bitmap.CompressFormat.JPEG, 100, baos);
             byte[] data = baos.toByteArray();
@@ -102,19 +88,58 @@ public class CarDataRepository {
             }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
-                    // ...
+                    //if the upload is successful get the url for storage Firebase and update the url field in the DB
                     taskSnapshot.getMetadata().getReference().getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                         @Override
                         public void onSuccess(Uri uri) {
                             Log.d("URL_prova",uri.toString());
                             newCar.setUrlImageCar(uri.toString());
-                            updateCar(newCar);
+                            db.collection("cars").add(newCar)
+                                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+
+                                        @Override
+                                        public void onSuccess(DocumentReference documentReference) {
+                                            //notify the adding was a succes
+                                            addCarSuccess.setValue(true);
+                                            //add the new car to the user car list to trigger the onChange()
+                                            List<Car> addList = userCarListLD.getValue();
+                                            addList.add(newCar);
+                                            userCarListLD.setValue(addList);
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Log.d("addCar",e.getMessage());
+                                            addCarSuccess.setValue(false);
+                                        }
+                                    });
                         }
                     });
 
                 }
             });
+        }else{
+            db.collection("cars").add(newCar)
+                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+
+                        @Override
+                        public void onSuccess(DocumentReference documentReference) {
+                            //notify the adding was a succes
+                            addCarSuccess.setValue(true);
+                            //add the new car to the user car list to trigger the onChange()
+                            List<Car> addList = userCarListLD.getValue();
+                            addList.add(newCar);
+                            userCarListLD.setValue(addList);
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.d("addCar",e.getMessage());
+                            addCarSuccess.setValue(false);
+                        }
+                    });
         }
 
 
@@ -170,8 +195,12 @@ public class CarDataRepository {
                             deleteImageCar(carToDelte.getUrlImageCar());
                         }else{
                             deleteCarSucces.setValue(true);
+
                         }
                     }
+                    //modify userCarList LiveData to trigger the onChange() in the observer
+                    List<Car> deleteList = userCarListLD.getValue();
+                    deleteList.remove(carToDelte);
 
                 }else{
                     deleteCarSucces.setValue(false);
@@ -195,6 +224,11 @@ public class CarDataRepository {
                             for(QueryDocumentSnapshot documentSnapshot: task.getResult()){
                                 documentSnapshot.getReference().set(car);
                                 addCarSuccess.setValue(true);
+                                //update userCarListLD;
+                                List<Car> updateList = userCarListLD.getValue();
+                                int index = findCarIndex(car,updateList);
+                                updateList.set(index,car);
+                                userCarListLD.setValue(updateList);
                             }
 
                         }else{
@@ -234,5 +268,16 @@ public class CarDataRepository {
 
     }
 
+    private int findCarIndex(Car car, List<Car> carList){
+        int index = 0;
+        for(Car c: carList){
+            if(c.getUID().equals(car.getUID()) && c.getCarName().equals(car.getCarName())){
+                return index;
+            }
+            index++;
+
+        }
+        return -1;
+    }
 
 }

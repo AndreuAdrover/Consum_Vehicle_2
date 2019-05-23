@@ -21,8 +21,6 @@ public class CarDataViewModel extends AndroidViewModel {
 
     private CarDataRepository carDataRepository;
     private LiveData<List<Car>> userCarList;
-    private MutableLiveData<Boolean> addCarSucces = new MutableLiveData<>();
-    private MutableLiveData<Boolean> removeCarSucces = new MutableLiveData<>();
 
     public CarDataViewModel(@NonNull Application application) {
         super(application);
@@ -37,61 +35,9 @@ public class CarDataViewModel extends AndroidViewModel {
 
     }
 
-    public void resetAddCarSuccess(){
-        if(addCarSucces.getValue()!=null && addCarSucces.getValue())
-            addCarSucces.setValue(false);
-        else
-            addCarSucces.setValue(true);
-    }
-    public void resetRemoveSuccess(){
-        if(removeCarSucces.getValue()!=null && removeCarSucces.getValue())
-            removeCarSucces.setValue(false);
-        else
-            removeCarSucces.setValue(true);
-
-    }
-    /*public LiveData<List<Car>> getUserCarList(){
-
-        return carDataRepository.getUserCarList();
-    }*/
-
     public LiveData<List<Car>> getUserCarList(){
 
-        final MediatorLiveData <List<Car>> mediatorCarList = new MediatorLiveData<>();
-
-        mediatorCarList.addSource(addCarSucces, new Observer<Boolean>() {
-            @Override
-            public void onChanged(@Nullable Boolean aBoolean) {
-                Log.d("mediatorCarList","addCar");
-                userCarList=carDataRepository.getUserCarList();
-                mediatorCarList.setValue(userCarList.getValue());
-            }
-        });
-        mediatorCarList.addSource(removeCarSucces, new Observer<Boolean>() {
-            @Override
-            public void onChanged(@Nullable Boolean aBoolean) {
-                Log.d("mediatorCarList","removeCar");
-                userCarList = carDataRepository.getUserCarList();
-                mediatorCarList.setValue(userCarList.getValue());
-            }
-        });
-        mediatorCarList.addSource(userCarList, new Observer<List<Car>>() {
-            @Override
-            public void onChanged(@Nullable List<Car> cars) {
-
-                if(userCarList.getValue()==null) {
-                    mediatorCarList.setValue(carDataRepository.getUserCarList().getValue());
-                    Log.d("mediatorCarList","CarListChanged_null");
-                }
-                else {
-                    mediatorCarList.setValue(userCarList.getValue());
-                    Log.d("mediatorCarList","CarListChanged"+mediatorCarList.getValue());
-                }
-            }
-        });
-
-
-        return mediatorCarList;
+        return userCarList;
     }
 
     public LiveData<Boolean> deleteCar(Car carToDelte) {

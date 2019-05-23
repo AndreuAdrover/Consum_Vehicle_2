@@ -164,7 +164,7 @@ public class MainActivity extends AppCompatActivity{
                                             //if delete operation is successful
                                             if (aBoolean) {
                                                 Toast.makeText(getBaseContext(), "!! " + carToDelete.getCarName() + " deleted !!", Toast.LENGTH_SHORT).show();
-                                                carDataViewModel.resetRemoveSuccess();
+                                                //carDataViewModel.resetRemoveSuccess();
                                                 refillDataViewModel.deleteCarRefills(carToDelete.getCarName());
                                                 Log.d("remove Car", "userCarList" + userCarList.size());
                                             } else {
@@ -301,7 +301,6 @@ public class MainActivity extends AppCompatActivity{
                             if (success) {
                                 Toast.makeText(MainActivity.this, "Car added", Toast.LENGTH_SHORT).show();
                                 //prepare the boolean variable to the next change
-                                carDataViewModel.resetAddCarSuccess();
                                 Log.d("addedCar", "userCarList.size()=" + userCarList.size());
                             } else {
                                 Toast.makeText(MainActivity.this, "Error Writting the document", Toast.LENGTH_SHORT).show();
