@@ -32,31 +32,17 @@ public class RefillDataViewModel extends AndroidViewModel {
         this.carName = carName;
     }
 
-    public void resetSuccess(){
+    /*public void resetSuccess(){
         if(success.getValue()!=null && success.getValue())
             success.setValue(false);
         else
             success.setValue(true);
-    }
+    }*/
 
 
     public LiveData<List<Refill>> getCarRefills(final String carName){
 
-        this.carName = carName;
-        final MediatorLiveData <List<Refill>> refillsMLD = new MediatorLiveData<>();
-        refillsMLD.addSource(success, new Observer<Boolean>() {
-            @Override
-            public void onChanged(@Nullable Boolean aBoolean) {
-                carRefillList = refillDataRepository.getCarRefills(carName);
-            }
-        });
-        refillsMLD.addSource(carRefillList, new Observer<List<Refill>>() {
-            @Override
-            public void onChanged(@Nullable List<Refill> refills) {
-                refillsMLD.setValue(carRefillList.getValue());
-            }
-        });
-        return refillsMLD;
+        return refillDataRepository.getCarRefills(carName);
     }
 
     public LiveData<Boolean> addRefill(Refill refill){

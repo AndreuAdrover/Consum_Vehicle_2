@@ -228,7 +228,7 @@ public class RefillsActivity extends AppCompatActivity {
                     @Override
                     public void onChanged(@Nullable Boolean aBoolean) {
                         if(aBoolean){
-                            refillDataViewModel.resetSuccess();
+                            //refillDataViewModel.resetSuccess();
                         }else{
                             Toast.makeText(RefillsActivity.this,"Error adding Refill",Toast.LENGTH_SHORT).show();
                         }
@@ -331,7 +331,7 @@ public class RefillsActivity extends AppCompatActivity {
                 public void onChanged(@Nullable Boolean aBoolean) {
                     //if the delete operation was succesfull
                     if(aBoolean){
-                        refillDataViewModel.resetSuccess();
+                        //refillDataViewModel.resetSuccess();
 
                     }else{
                         Toast.makeText(RefillsActivity.this,"Error deleting Refill",Toast.LENGTH_SHORT).show();

@@ -40,7 +40,7 @@ public class RefillDataRepository {
             user = firebaseAuth.getCurrentUser();
     }
 
-    public LiveData<Boolean> addRefill(Refill refill){
+    public LiveData<Boolean> addRefill(final Refill refill){
 
         db.collection("refills").add(refill)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
@@ -48,6 +48,11 @@ public class RefillDataRepository {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
                         Success.setValue(true);
+                        //update LiveData List
+                        List<Refill> addList = carRefillsLD.getValue();
+                        addList.add(refill);
+                        carRefillsLD.setValue(addList);
+
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -105,6 +110,7 @@ public class RefillDataRepository {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if(task.isSuccessful()){
+                            List<Refill> deleteSublist;
                             for(QueryDocumentSnapshot documentSnapshot: task.getResult()){
                                 documentSnapshot.getReference().delete();
                             }
@@ -116,7 +122,7 @@ public class RefillDataRepository {
                 });
 
     }
-    public LiveData<Boolean> deleteRefill(Refill refill){
+    public LiveData<Boolean> deleteRefill(final Refill refill){
         db.collection("refills")
                 .whereEqualTo("uid",user.getUid())
                 .whereEqualTo("carName",refill.getCarName())
@@ -131,6 +137,10 @@ public class RefillDataRepository {
                                 documentSnapshot.getReference().delete();
                             }
                             Success.setValue(true);
+                            //update LiveData List
+                            List<Refill> deleteList = carRefillsLD.getValue();
+                            deleteList.remove(refill);
+                            carRefillsLD.setValue(deleteList);
                         }else{
                             Log.d("deleteRefill", "Error getting documents: ", task.getException());
                             Success.setValue(false);
@@ -140,4 +150,6 @@ public class RefillDataRepository {
 
         return Success;
     }
+
+
 }
