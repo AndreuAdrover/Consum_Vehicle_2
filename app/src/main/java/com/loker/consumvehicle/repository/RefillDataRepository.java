@@ -122,6 +122,27 @@ public class RefillDataRepository {
                 });
 
     }
+    public LiveData<Boolean> changeCarNameOfRefills(String carName, String oldName){
+        db.collection("refills").whereEqualTo("uid",user.getUid())
+                .whereEqualTo("carName",oldName)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                      if(task.isSuccessful()){
+                          for(QueryDocumentSnapshot documentSnapshot: task.getResult()){
+                            documentSnapshot.getReference().update("carName",carName);
+                          }
+                          Success.setValue(true);
+
+                      }else{
+                          Log.d("changeCarNameOfRefills", "Error getting documents: ", task.getException());
+                          Success.setValue(false);
+                      }
+                    }
+                });
+        return Success;
+    }
     public LiveData<Boolean> deleteRefill(final Refill refill){
         db.collection("refills")
                 .whereEqualTo("uid",user.getUid())

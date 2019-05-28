@@ -17,21 +17,17 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
-import android.support.v4.view.GravityCompat;
 import android.view.MenuItem;
-import android.support.design.widget.NavigationView;
-import android.support.v4.widget.DrawerLayout;
 
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
+import com.loker.consumvehicle.Helper;
 import com.loker.consumvehicle.ViewModel.CarDataViewModel;
 import com.loker.consumvehicle.ViewModel.LoginViewModel;
 import com.loker.consumvehicle.R;
-import com.loker.consumvehicle.ViewModel.RefillDataFactory;
 import com.loker.consumvehicle.ViewModel.RefillDataViewModel;
 import com.loker.consumvehicle.model.Car;
 import com.loker.consumvehicle.model.Refill;
@@ -42,7 +38,8 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity{
 
-    private static final int REQUEST_ADD_CAR = 1;
+    public static final int REQUEST_ADD_CAR = 1;
+    public static final int REQUEST_EDIT_CAR = 2;
     public static final String  APPUSER_UID = "com.loker.consumvehicle.activities.MainActivity.UID";
     //AndroidViewModel
     private LoginViewModel consumVehiclesVM;
@@ -70,8 +67,8 @@ public class MainActivity extends AppCompatActivity{
 
         consumVehiclesVM = ViewModelProviders.of(this).get(LoginViewModel.class);
         carDataViewModel = ViewModelProviders.of(this).get(CarDataViewModel.class);
-        refillDataViewModel = ViewModelProviders.of(this, new RefillDataFactory(getApplication(),null)).get(RefillDataViewModel.class);
-
+        //refillDataViewModel = ViewModelProviders.of(this, new RefillDataFactory(getApplication(),null)).get(RefillDataViewModel.class);
+        refillDataViewModel = ViewModelProviders.of(this).get(RefillDataViewModel.class);
         consumVehiclesVM.getCurrenUser().observe(this, new Observer<User>() {
             @Override
             public void onChanged(@Nullable User currentUser) {
@@ -292,7 +289,7 @@ public class MainActivity extends AppCompatActivity{
                 newCar.setInicialKm(data.getFloatExtra("inicialKms",0));
                 newCar.setTankLitres(data.getFloatExtra("tankLitres",30));
                 if(data.getStringExtra("thumbnail")!=null)
-                    newCar.setBitmapImageCar(getBitmapFromString(data.getStringExtra("thumbnail")));
+                    newCar.setBitmapImageCar(new Helper().getBitmapFromString(data.getStringExtra("thumbnail")));
                 newCar.setUID(appUser.getUID());
                 carDataViewModel.addCar(newCar).observe(this, new Observer<Boolean>() {
                     @Override
@@ -309,13 +306,61 @@ public class MainActivity extends AppCompatActivity{
                     }
                 });
             }
+        } else if (requestCode == REQUEST_EDIT_CAR) {
+            if(resultCode == RESULT_OK){
+                String carName =  data.getStringExtra("carName");
+                if(carName!=null) {
+                    Car editedCar = null;
+                    String oldCarName = data.getStringExtra("oldCarName");
+                    //check if the name of car have changed. If changed we have oldCarName != null
+                    if (oldCarName != null) {
+                        //find the car in the carList
+                        int indexCarToChange = new Helper().findCarIndex(userCarList, (Car c) -> oldCarName.equals(c.getCarName()));
+                        if (indexCarToChange >= 0) {
+                            editedCar = userCarList.get(indexCarToChange);
+                            editedCar.setCarName(carName);
+                            //delete de image from the storage because the reference will be incorrect
+                            if (editedCar.getUrlImageCar() != null) {
+                                carDataViewModel.deleteImageCar(editedCar.getUrlImageCar());
+                                //delete urlimage from car object because is incorrect
+                                editedCar.setUrlImageCar(null);
+                            }
+                            //change name on DB
+                            carDataViewModel.updateCarName(editedCar, oldCarName);
+                            //change nameCar field on refills table
+                            refillDataViewModel.changeCarNameOfRefills(editedCar.getCarName(), oldCarName);
+                        }
+                        //if the car name still the same
+                    }else{
+                        int indexCarToChange = new Helper().findCarIndex(userCarList, (Car c) -> carName.equals(c.getCarName()));
+                        if (indexCarToChange >= 0) {
+                            editedCar = userCarList.get(indexCarToChange);
+                        }
+                    }
+                    if(editedCar!=null) {
+                        //check if we have to chamnge the image
+                        if (data.getStringExtra("thumbnail") != null) {
+                            Bitmap image = new Helper().getBitmapFromString(data.getStringExtra("thumbnail"));
+                            editedCar.setBitmapImageCar(image);
+                            //delete url from car object because will be incorrect
+                            editedCar.setUrlImageCar(null);
+                        }
+
+                        if (editedCar.getUrlImageCar() == null && editedCar.getBitmapImageCar() != null) {
+                            //add the new image or the old image but with the new reference do to the changed carName
+                            carDataViewModel.updateImageCar(editedCar);
+                        }
+                    }else{
+                            Toast.makeText(this, "Car dosen't exist", Toast.LENGTH_LONG).show();
+                    }
+
+
+                }
+
+            }
         }
     }
 
-    private Bitmap getBitmapFromString(String stringPicture) {
-        byte[] decodedString = Base64.decode(stringPicture, Base64.DEFAULT);
-        return BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-    }
 
 
 }

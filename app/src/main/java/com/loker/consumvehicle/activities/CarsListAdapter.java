@@ -1,22 +1,31 @@
 package com.loker.consumvehicle.activities;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.loker.consumvehicle.Helper;
 import com.loker.consumvehicle.R;
 import com.loker.consumvehicle.model.Car;
 import com.loker.consumvehicle.model.Refill;
 
+import java.io.ByteArrayOutputStream;
 import java.util.List;
 
 public class CarsListAdapter extends RecyclerView.Adapter<CarsListAdapter.CarHolder> {
@@ -45,7 +54,7 @@ public class CarsListAdapter extends RecyclerView.Adapter<CarsListAdapter.CarHol
     @Override
     public void onBindViewHolder(@NonNull CarHolder carHolder, int i) {
 
-        final Car car = carList.get(i);
+        Car car = carList.get(i);
 
         carHolder.tvCarName.setText(car.getCarName());
         carHolder.tvKmsOnClock.setText(String.valueOf(car.getTotalKm()));
@@ -56,10 +65,8 @@ public class CarsListAdapter extends RecyclerView.Adapter<CarsListAdapter.CarHol
         carHolder.tvLitres100km.setText(String.valueOf(car.getAVGLitres(refillList)));
 
         if(car.getBitmapImageCar()!=null){
-            carHolder.imageCar.setVisibility(View.VISIBLE);
+            //carHolder.imageCar.setVisibility(View.VISIBLE);
             carHolder.imageCar.setImageBitmap(car.getBitmapImageCar());
-        }else{
-            carHolder.imageCar.setVisibility(View.INVISIBLE);
         }
 
 
@@ -75,6 +82,34 @@ public class CarsListAdapter extends RecyclerView.Adapter<CarsListAdapter.CarHol
             }
         });
 
+        carHolder.setImageCarClickListener(new ItemClickListener() {
+            @Override
+            public void onItemClickListener(View view, int position) {
+             new AlertDialog.Builder(ctx)
+                     .setTitle("Edit Car")
+                     .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                         @Override
+                         public void onClick(DialogInterface dialogInterface, int i) {
+
+                         }
+                     })
+                     .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                         @Override
+                         public void onClick(DialogInterface dialogInterface, int i) {
+
+                             Intent intent = new Intent(ctx,EditCarActivity.class);
+                             //pass the image  as String if it exists
+                             if(car.getBitmapImageCar()!=null) {
+                                 String bitmapString = new Helper().getStringFromBitmap(car.getBitmapImageCar());
+                                 intent.putExtra("imageCar",bitmapString);
+                             }
+                             intent.putExtra("car",new Gson().toJson(car,Car.class));
+                             ((Activity) ctx).startActivityForResult(intent,MainActivity.REQUEST_EDIT_CAR);
+                         }
+                     })
+                     .show();
+            }
+        });
 
 
     }
@@ -105,12 +140,12 @@ public class CarsListAdapter extends RecyclerView.Adapter<CarsListAdapter.CarHol
         TextView tvEurosTotal;
         TextView tvEuros100km;
         TextView tvLitres100km;
-        ImageView imageCar;
+        ImageView imageCar,iconEdit;
 
         ConstraintLayout layout;
 
         ItemClickListener itemCarListClickListener;
-        ItemClickListener imageCarClickListener;
+        ItemClickListener editClicklistener;
 
         public CarHolder(@NonNull View itemView) {
             super(itemView);
@@ -125,6 +160,8 @@ public class CarsListAdapter extends RecyclerView.Adapter<CarsListAdapter.CarHol
             //icItemMenu = itemView.findViewById(R.id.ic_itemMenu);
             layout = itemView.findViewById(R.id.car_layout);
             imageCar = itemView.findViewById(R.id.imageCar);
+            //iconEdit=  itemView.findViewById(R.id.ic_edit);
+
 
 
             layout.setOnClickListener(new View.OnClickListener() {
@@ -134,29 +171,23 @@ public class CarsListAdapter extends RecyclerView.Adapter<CarsListAdapter.CarHol
                     itemCarListClickListener.onItemClickListener(view,getLayoutPosition());
                 }
             });
+            imageCar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    editClicklistener.onItemClickListener(view,getLayoutPosition());
+                }
+            });
         }
 
         private void setItemCarListClickListener(ItemClickListener ic){
             this.itemCarListClickListener = ic;
         }
+        private void setImageCarClickListener(ItemClickListener ic){
+            this.editClicklistener = ic;
+        }
 
 
     }
 
-    /*private String getStringFromBitmap(Bitmap bitmapPicture) {
-        final int COMPRESSION_QUALITY = 100;
-        String encodedImage;
-        ByteArrayOutputStream byteArrayBitmapStream = new ByteArrayOutputStream();
-        bitmapPicture.compress(Bitmap.CompressFormat.PNG, COMPRESSION_QUALITY,
-                byteArrayBitmapStream);
-        byte[] b = byteArrayBitmapStream.toByteArray();
-        encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
-        return encodedImage;
-    }
-    private Bitmap getBitmapFromString(String stringPicture) {
-        byte[] decodedString = Base64.decode(stringPicture, Base64.DEFAULT);
-        Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-        return decodedByte;
-    }*/
 
 }

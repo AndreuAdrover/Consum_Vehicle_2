@@ -25,8 +25,6 @@ public class SignInActivity extends AppCompatActivity {
 
     private EditText etUserName,etPassword;
 
-    //private FirebaseAuth firebaseAuth;
-
     private LoginViewModel consumVehiclesVM;
 
     private ProgressDialog progressDialog;

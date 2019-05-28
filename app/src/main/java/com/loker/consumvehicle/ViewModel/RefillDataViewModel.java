@@ -24,13 +24,18 @@ public class RefillDataViewModel extends AndroidViewModel {
     private LiveData<List<Refill>> carRefillList;
     private String carName;
 
-
-    public RefillDataViewModel(@NonNull Application application, String carName) {
+    public RefillDataViewModel(@NonNull Application application) {
         super(application);
         refillDataRepository = new RefillDataRepository();
-        carRefillList = refillDataRepository.getCarRefills(carName);
-        this.carName = carName;
     }
+
+
+    /*public RefillDataViewModel(@NonNull Application application, String carName) {
+        super(application);
+        refillDataRepository = new RefillDataRepository();
+        //carRefillList = refillDataRepository.getCarRefills(carName);
+        this.carName = carName;
+    }*/
 
     /*public void resetSuccess(){
         if(success.getValue()!=null && success.getValue())
@@ -45,9 +50,14 @@ public class RefillDataViewModel extends AndroidViewModel {
         return refillDataRepository.getCarRefills(carName);
     }
 
+
     public LiveData<Boolean> addRefill(Refill refill){
 
         return refillDataRepository.addRefill(refill);
+    }
+
+    public LiveData<Boolean> changeCarNameOfRefills(String carName, String oldName){
+        return refillDataRepository.changeCarNameOfRefills(carName,oldName);
     }
 
     public void deleteCarRefills(String carName){

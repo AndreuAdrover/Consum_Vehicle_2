@@ -48,7 +48,15 @@ public class CarDataViewModel extends AndroidViewModel {
         carDataRepository.updateCar(car);
     }
 
+    public void updateCarName(Car car, String oldName){ carDataRepository.updateCarName(car,oldName);}
+
     public LiveData<Bitmap> getImageCar(Car car){
         return carDataRepository.getCarImage(car);
+    }
+
+    public void updateImageCar(Car car){carDataRepository.updateImageCar(car);}
+
+    public void deleteImageCar(String urlImage){
+        carDataRepository.deleteImageCar(urlImage);
     }
 }

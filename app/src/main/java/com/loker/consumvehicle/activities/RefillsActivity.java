@@ -6,7 +6,6 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -16,7 +15,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -27,21 +25,17 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.loker.consumvehicle.R;
 import com.loker.consumvehicle.ViewModel.CarDataViewModel;
-import com.loker.consumvehicle.ViewModel.RefillDataFactory;
 import com.loker.consumvehicle.ViewModel.RefillDataViewModel;
 import com.loker.consumvehicle.model.Car;
 import com.loker.consumvehicle.model.Refill;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
 import static android.os.Environment.getExternalStorageDirectory;
-import static android.os.Environment.getExternalStoragePublicDirectory;
 import static com.loker.consumvehicle.activities.AddRefillActivity.NEW_REFILL;
 import static com.loker.consumvehicle.activities.CarsListAdapter.CAR_CLICKED;
 
@@ -88,7 +82,8 @@ public class RefillsActivity extends AppCompatActivity {
             carRefillsRV.setAdapter(carRefillsAdapter);
 
             carDataViewModel = ViewModelProviders.of(this).get(CarDataViewModel.class);
-            refillDataViewModel = ViewModelProviders.of(this, new RefillDataFactory(getApplication(),currentCar.getCarName())).get(RefillDataViewModel.class);
+            //refillDataViewModel = ViewModelProviders.of(this, new RefillDataFactory(getApplication(),currentCar.getCarName())).get(RefillDataViewModel.class);
+            refillDataViewModel = ViewModelProviders.of(this).get(RefillDataViewModel.class);
             refillDataViewModel.getCarRefills(currentCar.getCarName()).observe(this, new Observer<List<Refill>>() {
                 @Override
                 public void onChanged(@Nullable List<Refill> refills) {

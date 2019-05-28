@@ -1,15 +1,11 @@
 package com.loker.consumvehicle.repository;
 
 import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.MediatorLiveData;
 import android.arch.lifecycle.MutableLiveData;
-import android.arch.lifecycle.Observer;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.google.android.gms.tasks.Continuation;
@@ -28,7 +24,9 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.loker.consumvehicle.Helper;
 import com.loker.consumvehicle.model.Car;
+import com.loker.consumvehicle.model.CheckCar;
 import com.loker.consumvehicle.model.Refill;
 import com.loker.consumvehicle.model.User;
 
@@ -190,7 +188,7 @@ public class CarDataRepository {
                     for(QueryDocumentSnapshot document: task.getResult()){
                         document.getReference().delete();
                         if(carToDelte.getUrlImageCar()!=null){
-                            //if there is an image for this car in the storage we have tremove it
+                            //if there is an image for this car in the storage we have to remove it
                             //the deleteImageCar funciton sets deleteCarSucces to true if works
                             deleteImageCar(carToDelte.getUrlImageCar());
                         }else{
@@ -226,7 +224,8 @@ public class CarDataRepository {
                                 addCarSuccess.setValue(true);
                                 //update userCarListLD;
                                 List<Car> updateList = userCarListLD.getValue();
-                                int index = findCarIndex(car,updateList);
+                                int index = new Helper().findCarIndex(updateList,
+                                        (Car c)->c.getCarName().equals(car.getCarName()) && c.getUID().equals(car.getUID()));
                                 updateList.set(index,car);
                                 userCarListLD.setValue(updateList);
                             }
@@ -236,6 +235,68 @@ public class CarDataRepository {
                         }
                     }
                 });
+    }
+
+    public void updateCarName(Car car, String oldName){
+        //remove urlImageCarReference because will be incorrect if we change the name
+        car.setUrlImageCar(null);
+        //find the car in the database using the oldname
+        db.collection("cars").whereEqualTo("carName",oldName)
+                .whereEqualTo("uid",user.getUid())
+                .limit(1)
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if(task.isSuccessful()){
+                    for(QueryDocumentSnapshot doc: task.getResult()){
+                        doc.getReference().update("carName",car.getCarName());
+                    }
+                    List<Car> updateList = userCarListLD.getValue();
+                    int index = new Helper().findCarIndex(updateList,
+                            (Car c)->oldName.equals(c.getCarName())&& user.getUid().equals(c.getUID()));
+                    if(index>=0) {
+                        updateList.set(index, car);
+                        userCarListLD.setValue(updateList);
+                    }else Log.d("updateCarName","Error car not found in the list");
+                }else{
+                    Log.e("updateCarName","Error updating car task:"+task.getResult().toString());
+                }
+            }
+        });
+
+    }
+
+    public void updateImageCar(Car newCar){
+
+        //upload the image Car
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        newCar.getBitmapImageCar().compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] data = baos.toByteArray();
+        StorageReference imageCarRef = storage.getReference().child(newCar.getCarName() + "_img");
+        UploadTask uploadTask = imageCarRef.putBytes(data);
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle unsuccessful uploads
+                addCarSuccess.setValue(false);
+                Log.d("addCarImageSuccesError:",exception.getMessage());
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                //if the upload is successful get the url for storage Firebase and update the url field in the DB
+                taskSnapshot.getMetadata().getReference().getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        Log.d("URL_prova",uri.toString());
+                        newCar.setUrlImageCar(uri.toString());
+                        updateCar(newCar);
+                    }
+                });
+
+            }
+        });
+
     }
 
     public LiveData<Bitmap> getCarImage(Car car){
@@ -255,7 +316,7 @@ public class CarDataRepository {
         return bitmapLD;
     }
 
-    private void deleteImageCar(String url){
+    public void deleteImageCar(String url){
         StorageReference imageRef = storage.getReferenceFromUrl(url);
         imageRef.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
@@ -268,16 +329,7 @@ public class CarDataRepository {
 
     }
 
-    private int findCarIndex(Car car, List<Car> carList){
-        int index = 0;
-        for(Car c: carList){
-            if(c.getUID().equals(car.getUID()) && c.getCarName().equals(car.getCarName())){
-                return index;
-            }
-            index++;
 
-        }
-        return -1;
-    }
+
 
 }

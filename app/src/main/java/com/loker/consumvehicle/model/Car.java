@@ -15,7 +15,7 @@ public class Car {
     private float tankLitres = 30;
     private String urlImageCar = null;
     @Exclude
-    private Bitmap bitmapImageCar = null;
+    private transient Bitmap bitmapImageCar = null;
 
     public Car(){}
 

@@ -25,6 +25,9 @@
             android:name=".activities.AddCarActivity"
             android:label="@string/title_activity_add_car"
             android:parentActivityName=".activities.MainActivity" />
+        <activity android:name=".activities.EditCarActivity"
+            android:label="@string/title_activity_edit_car"
+            android:parentActivityName=".activities.MainActivity"/>
         <activity
             android:name=".activities.SignUpActivity"
             android:label="Register"

@@ -71,6 +71,7 @@
     <string name="activity_add_car_label_litres_in_deposit">Estimated inicial litres in the tank</string>
     <string name="check_all">All</string>
     <string name="activity_add_car_button_imageCar">Add image Car</string>
+    <string name="title_activity_edit_car">Edit Car Data</string>
 
 
 </resources>
