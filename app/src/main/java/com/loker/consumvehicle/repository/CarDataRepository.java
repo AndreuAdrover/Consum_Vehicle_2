@@ -8,17 +8,14 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
@@ -26,17 +23,11 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.loker.consumvehicle.Helper;
 import com.loker.consumvehicle.model.Car;
-import com.loker.consumvehicle.model.CheckCar;
-import com.loker.consumvehicle.model.Refill;
-import com.loker.consumvehicle.model.User;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 
 public class CarDataRepository {
 
@@ -224,7 +215,7 @@ public class CarDataRepository {
                                 addCarSuccess.setValue(true);
                                 //update userCarListLD;
                                 List<Car> updateList = userCarListLD.getValue();
-                                int index = new Helper().findCarIndex(updateList,
+                                int index = Helper.findCarIndex(updateList,
                                         (Car c)->c.getCarName().equals(car.getCarName()) && c.getUID().equals(car.getUID()));
                                 updateList.set(index,car);
                                 userCarListLD.setValue(updateList);
@@ -252,7 +243,7 @@ public class CarDataRepository {
                         doc.getReference().update("carName",car.getCarName());
                     }
                     List<Car> updateList = userCarListLD.getValue();
-                    int index = new Helper().findCarIndex(updateList,
+                    int index = Helper.findCarIndex(updateList,
                             (Car c)->oldName.equals(c.getCarName())&& user.getUid().equals(c.getUID()));
                     if(index>=0) {
                         updateList.set(index, car);

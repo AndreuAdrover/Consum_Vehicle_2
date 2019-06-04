@@ -44,15 +44,20 @@
                 android:text="car name"
                 app:layout_constraintBaseline_toBaselineOf="@+id/tv_label_carName"
                 app:layout_constraintStart_toEndOf="@+id/tv_label_carName" />
+
             <ImageView
                 android:id="@+id/imageCar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
-                android:layout_marginTop="16dp"
-                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginBottom="8dp"
+                android:src="@android:drawable/ic_menu_camera"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:src="@android:drawable/ic_menu_camera"/>
+                app:layout_constraintStart_toEndOf="@+id/tv_litres"
+                app:layout_constraintTop_toBottomOf="@+id/tv_label_kms_noted" />
 
             <TextView
                 android:id="@+id/tv_label_kms"
@@ -156,9 +161,8 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginStart="24dp"
                 android:text="@string/carxml_label_euros100km"
-                app:layout_constraintStart_toEndOf="@id/tv_Lto100km"
-                app:layout_constraintBaseline_toBaselineOf="@id/tv_label_Lto100km" />
-
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_label_Lto100km"/>
             <TextView
                 android:id="@+id/tv_euros100km"
                 android:layout_width="wrap_content"

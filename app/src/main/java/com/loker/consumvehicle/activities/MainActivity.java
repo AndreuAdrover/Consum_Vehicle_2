@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity{
 
     private RecyclerView carsListRV;
     private CarsListAdapter carsListAdapter;
-    private Menu actionMenu;
+    private Menu actionMenu= null;
    // private NavigationView navigationView;
 
     @Override
@@ -226,7 +226,8 @@ public class MainActivity extends AppCompatActivity{
         this.actionMenu = menu;
         if(actionMenu!=null) {
             MenuItem userNameItem = actionMenu.findItem(R.id.action_userName);
-            userNameItem.setTitle(appUser.getEmail());
+            if(appUser != null)
+                userNameItem.setTitle(appUser.getEmail());
         }
         return true;
     }
@@ -289,7 +290,7 @@ public class MainActivity extends AppCompatActivity{
                 newCar.setInicialKm(data.getFloatExtra("inicialKms",0));
                 newCar.setTankLitres(data.getFloatExtra("tankLitres",30));
                 if(data.getStringExtra("thumbnail")!=null)
-                    newCar.setBitmapImageCar(new Helper().getBitmapFromString(data.getStringExtra("thumbnail")));
+                    newCar.setBitmapImageCar(Helper.getBitmapFromString(data.getStringExtra("thumbnail")));
                 newCar.setUID(appUser.getUID());
                 carDataViewModel.addCar(newCar).observe(this, new Observer<Boolean>() {
                     @Override
@@ -315,7 +316,7 @@ public class MainActivity extends AppCompatActivity{
                     //check if the name of car have changed. If changed we have oldCarName != null
                     if (oldCarName != null) {
                         //find the car in the carList
-                        int indexCarToChange = new Helper().findCarIndex(userCarList, (Car c) -> oldCarName.equals(c.getCarName()));
+                        int indexCarToChange = Helper.findCarIndex(userCarList, (Car c) -> oldCarName.equals(c.getCarName()));
                         if (indexCarToChange >= 0) {
                             editedCar = userCarList.get(indexCarToChange);
                             editedCar.setCarName(carName);
@@ -332,7 +333,7 @@ public class MainActivity extends AppCompatActivity{
                         }
                         //if the car name still the same
                     }else{
-                        int indexCarToChange = new Helper().findCarIndex(userCarList, (Car c) -> carName.equals(c.getCarName()));
+                        int indexCarToChange = Helper.findCarIndex(userCarList, (Car c) -> carName.equals(c.getCarName()));
                         if (indexCarToChange >= 0) {
                             editedCar = userCarList.get(indexCarToChange);
                         }
@@ -340,7 +341,7 @@ public class MainActivity extends AppCompatActivity{
                     if(editedCar!=null) {
                         //check if we have to chamnge the image
                         if (data.getStringExtra("thumbnail") != null) {
-                            Bitmap image = new Helper().getBitmapFromString(data.getStringExtra("thumbnail"));
+                            Bitmap image = Helper.getBitmapFromString(data.getStringExtra("thumbnail"));
                             editedCar.setBitmapImageCar(image);
                             //delete url from car object because will be incorrect
                             editedCar.setUrlImageCar(null);

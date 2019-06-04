@@ -100,7 +100,7 @@ public class CarsListAdapter extends RecyclerView.Adapter<CarsListAdapter.CarHol
                              Intent intent = new Intent(ctx,EditCarActivity.class);
                              //pass the image  as String if it exists
                              if(car.getBitmapImageCar()!=null) {
-                                 String bitmapString = new Helper().getStringFromBitmap(car.getBitmapImageCar());
+                                 String bitmapString = Helper.getStringFromBitmap(car.getBitmapImageCar());
                                  intent.putExtra("imageCar",bitmapString);
                              }
                              intent.putExtra("car",new Gson().toJson(car,Car.class));

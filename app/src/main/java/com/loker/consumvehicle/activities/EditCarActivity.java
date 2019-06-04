@@ -45,7 +45,7 @@ public class EditCarActivity extends AppCompatActivity {
             newCar=new Gson().fromJson(intent.getStringExtra("car"),Car.class);
             etCarName.setText(newCar.getCarName());
             if(intent.getStringExtra("imageCar")!=null) {
-                imageCar.setImageBitmap(new Helper().getBitmapFromString(intent.getStringExtra("imageCar")));
+                imageCar.setImageBitmap(Helper.getBitmapFromString(intent.getStringExtra("imageCar")));
             }
 
         }else{
@@ -59,19 +59,24 @@ public class EditCarActivity extends AppCompatActivity {
     public void editCar(View view) {
 
                 Intent reply = new Intent();
+                //check if the name has been changed
                 if(!etCarName.getText().toString().equals(newCar.getCarName())){
+                    //if the name hase been changed we send oldCarName value
                     reply.putExtra("oldCarName",newCar.getCarName());
                 }
+                //send actual carName
                 reply.putExtra("carName",etCarName.getText().toString());
+
                 if(newCar.getBitmapImageCar()!=null)//it means we have changed the image
-                    reply.putExtra("thumbnail",new Helper().getStringFromBitmap(newCar.getBitmapImageCar()));
+                    //send the new image in String format
+                    reply.putExtra("thumbnail",Helper.getStringFromBitmap(newCar.getBitmapImageCar()));
                 setResult(RESULT_OK,reply);
                 finish();
 
     }
 
     public void addImageCar(View view) {
-
+            //get an image from camera app
             Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
                 startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
