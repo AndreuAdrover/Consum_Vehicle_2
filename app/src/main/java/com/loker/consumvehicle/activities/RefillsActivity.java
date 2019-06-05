@@ -6,6 +6,7 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -30,6 +31,8 @@ import com.loker.consumvehicle.model.Car;
 import com.loker.consumvehicle.model.Refill;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -53,11 +56,7 @@ public class RefillsActivity extends AppCompatActivity {
     private RecyclerView carRefillsRV;
     private RefillListAdapter carRefillsAdapter;
 
-    String fileName;
-    File path;
 
-    //private String carName;
-    //private String uid;
     private Car currentCar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,11 +64,7 @@ public class RefillsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_refill_list);
 
         Intent intent = getIntent();
-        //if(intent.getStringExtra(CAR_CLICKED)!=null || currentCar!=null){
 
-            //carName = intent.getStringExtra(CarsListAdapter.CAR_CLICKED);
-            //uid = intent.getStringExtra(MainActivity.APPUSER_UID);
-           // if(intent.getStringExtra(CAR_CLICKED)!=null)
             currentCar = new Gson().fromJson(intent.getStringExtra(CAR_CLICKED),Car.class);
 
             setTitle(getString(R.string.title_activity_refill_list)+" "+currentCar.getCarName());
@@ -232,54 +227,46 @@ public class RefillsActivity extends AppCompatActivity {
 
     }
 
-    private void writeData(File path, String fileName){
-        // Get the directory for the user's public pictures directory.
-        boolean isPresent=true;
-        if(!path.exists()){
-            isPresent = path.mkdir();
-        }
-        Log.d("exportRefills()",path.toString()+"__"+path.getAbsolutePath());
-        if(isPresent) {
-            try {
-                File myExternalFile = new File(path.getAbsolutePath(), fileName);
+    private void writeData(File file){
 
-                FileWriter fos = new FileWriter(myExternalFile);
-                int i=0;
-                for(Refill rf: carRefills) {
-                    fos.append(new Gson().toJson(rf, Refill.class));
-                    i++;
-                }
-                Snackbar.make(findViewById(R.id.refillListCoordinatorLayout),i+" refills exported to "+path+"/"+fileName,Snackbar.LENGTH_LONG)
-                        .show();
-                fos.close();
-            } catch (IOException e) {
-                e.printStackTrace();
+        Log.d("exportRefills()",file.toString());
+
+        FileOutputStream fos = null;
+        try {
+            fos = new FileOutputStream(file);
+
+            int i = 0;
+            for (Refill rf : carRefills) {
+                Log.d("refills to file", new Gson().toJson(rf, Refill.class));
+                fos.write(new Gson().toJson(rf, Refill.class).getBytes());
+                i++;
             }
+            fos.close();
+            Snackbar.make(findViewById(R.id.refillListCoordinatorLayout), i + " refills exported to " + file, Snackbar.LENGTH_LONG)
+                    .show();
 
 
-        }else{
-            Toast.makeText(this, "External storage not available", Toast.LENGTH_SHORT).show();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case 1: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    for (Refill rf : carRefills) {
-                        writeData(path, fileName);
-                    }
+        if (requestCode == 1) {
+            // If request is cancelled, the result arrays are empty.
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                exportRefills();
 
-                } else {
-                    Toast.makeText(RefillsActivity.this, "Please provide permission", Toast.LENGTH_LONG).show();
-                }
-                break;
+            } else {
+                Toast.makeText(RefillsActivity.this, "Please provide permission", Toast.LENGTH_LONG).show();
             }
-        }
+        }else
+            Log.d("onRequestPermission", "requestCode != 1 :"+requestCode);
+
     }
 
     private boolean checkIfAlreadyhavePermission() {
@@ -288,12 +275,24 @@ public class RefillsActivity extends AppCompatActivity {
     }
 
     private void exportRefills() {
-        fileName = currentCar.getCarName()+"Refills.json";
-        path = new File(getExternalStorageDirectory() + "/Documents");
+        //check if we have permissions to write in the External storage
         if(!checkIfAlreadyhavePermission()){
             ActivityCompat.requestPermissions(this, new String[] {android.Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
         }else{
-            writeData(path,fileName);
+            String extorageState = Environment.getExternalStorageState();
+
+            //check if external storage is available
+            if( extorageState.equals(Environment.MEDIA_MOUNTED)){
+                File path = Environment.getExternalStorageDirectory();
+                File dir = new File(path.getAbsolutePath()+"/VehiclesBackup");
+                if(!dir.exists()){
+                    dir.mkdir();
+                }
+                File file = new File(dir,currentCar.getCarName()+"Refills.json");
+                writeData(file);
+            }else{
+                Toast.makeText(getApplicationContext(), "External Storage not found", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 

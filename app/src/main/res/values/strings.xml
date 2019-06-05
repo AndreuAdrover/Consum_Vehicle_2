@@ -73,5 +73,8 @@
     <string name="activity_add_car_button_imageCar">Add image Car</string>
     <string name="title_activity_edit_car">Edit Car Data</string>
 
+    <string name="select_from_gallery">Select photo from gallery</string>
+    <string name="take_a_photo_with_camera">Capture photo from camera</string>
+
 
 </resources>

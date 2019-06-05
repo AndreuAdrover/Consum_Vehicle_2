@@ -1,10 +1,14 @@
 package com.loker.consumvehicle.activities;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.view.View;
@@ -19,10 +23,14 @@ import com.loker.consumvehicle.R;
 import com.loker.consumvehicle.model.Car;
 
 import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.net.URI;
 
 public class EditCarActivity extends AppCompatActivity {
 
     private static final int REQUEST_IMAGE_CAPTURE = 1;
+    private static final int REQUEST_IMAGE_GALLERY = 2;
 
     private EditText etCarName;
 
@@ -76,22 +84,74 @@ public class EditCarActivity extends AppCompatActivity {
     }
 
     public void addImageCar(View view) {
-            //get an image from camera app
-            Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-            }
+        AlertDialog.Builder pictureDialog = new AlertDialog.Builder(this);
+        pictureDialog.setTitle("Select Action");
+        String[] pictureDialogItems = {
+                getString(R.string.select_from_gallery),
+                getString(R.string.take_a_photo_with_camera) };
+        pictureDialog.setItems(pictureDialogItems,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case 0:
+                                openGallery();
+                                break;
+                            case 1:
+                                takePhotoFromCamera();
+                                break;
+                        }
+                    }
+                });
+        pictureDialog.show();
+
+    }
+
+    public void openGallery(){
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(
+                Intent.createChooser(intent, "Seleccione una imagen"),
+                REQUEST_IMAGE_GALLERY);
+    }
+    public void takePhotoFromCamera(){
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
-            imageCar.setImageBitmap(imageBitmap);
-            newCar.setBitmapImageCar(imageBitmap);
+        if(resultCode == RESULT_OK) {
+            if (requestCode == REQUEST_IMAGE_CAPTURE) {
+                Bundle extras = data.getExtras();
+                Bitmap imageBitmap = (Bitmap) extras.get("data");
+                imageCar.setImageBitmap(imageBitmap);
+                newCar.setBitmapImageCar(imageBitmap);
 
+            }
+            else if(requestCode == REQUEST_IMAGE_GALLERY){
+                Uri selectedImage;
+                selectedImage = data.getData();
+                if(selectedImage.getPath()!=null) {
+                    InputStream imageStream = null;
+                    try {
+                        imageStream = getContentResolver().openInputStream(selectedImage);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+
+                    Bitmap imageBitmap = BitmapFactory.decodeStream(imageStream);
+                    //scale image to fit in the card
+                    Bitmap scaled = Helper.scaleBitmap(this, imageBitmap, (float) 1 / 3);
+
+                    imageCar.setImageBitmap(scaled);
+                    newCar.setBitmapImageCar(scaled);
+                }
+            }
         }
     }
 

@@ -5,7 +5,6 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,7 +13,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.view.MenuItem;
@@ -42,7 +40,7 @@ public class MainActivity extends AppCompatActivity{
     public static final int REQUEST_EDIT_CAR = 2;
     public static final String  APPUSER_UID = "com.loker.consumvehicle.activities.MainActivity.UID";
     //AndroidViewModel
-    private LoginViewModel consumVehiclesVM;
+    private LoginViewModel userViewModel;
     private CarDataViewModel carDataViewModel;
     private RefillDataViewModel refillDataViewModel;
 
@@ -65,11 +63,11 @@ public class MainActivity extends AppCompatActivity{
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        consumVehiclesVM = ViewModelProviders.of(this).get(LoginViewModel.class);
+        userViewModel = ViewModelProviders.of(this).get(LoginViewModel.class);
         carDataViewModel = ViewModelProviders.of(this).get(CarDataViewModel.class);
         //refillDataViewModel = ViewModelProviders.of(this, new RefillDataFactory(getApplication(),null)).get(RefillDataViewModel.class);
         refillDataViewModel = ViewModelProviders.of(this).get(RefillDataViewModel.class);
-        consumVehiclesVM.getCurrenUser().observe(this, new Observer<User>() {
+        userViewModel.getCurrenUser().observe(this, new Observer<User>() {
             @Override
             public void onChanged(@Nullable User currentUser) {
                 if (currentUser == null) {
@@ -243,7 +241,7 @@ public class MainActivity extends AppCompatActivity{
         if (id == R.id.action_userName) {
             return true;
         }else if(id == R.id.sign_out_menu){
-                consumVehiclesVM.signOut();
+                userViewModel.signOut();
                 //Auth.GoogleSignInApi.signOut(mGoogleApiClient);
                 appUser = null;
                 startActivity(new Intent(this, SignInActivity.class));

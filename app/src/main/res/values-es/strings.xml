@@ -72,6 +72,11 @@
     <string name="check_all">Todos</string>
     <string name="activity_add_car_button_imageCar">Añadir Imagen</string>
 
+    <string name="title_activity_edit_car">Editar Datos</string>
+
+    <string name="select_from_gallery">Seleccionar de la galería</string>
+    <string name="take_a_photo_with_camera">Usar la cámara</string>
+
 
 
 </resources>

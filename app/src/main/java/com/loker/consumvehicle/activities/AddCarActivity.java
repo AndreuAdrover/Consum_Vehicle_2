@@ -5,15 +5,11 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.opengl.GLES10;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Base64;
-import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -24,7 +20,6 @@ import com.loker.consumvehicle.Helper;
 import com.loker.consumvehicle.R;
 import com.loker.consumvehicle.model.Car;
 
-import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 
@@ -97,15 +92,15 @@ public class AddCarActivity extends AppCompatActivity {
         AlertDialog.Builder pictureDialog = new AlertDialog.Builder(this);
         pictureDialog.setTitle("Select Action");
         String[] pictureDialogItems = {
-                "Select photo from gallery",
-                "Capture photo from camera" };
+                getString(R.string.select_from_gallery),
+                getString(R.string.take_a_photo_with_camera) };
         pictureDialog.setItems(pictureDialogItems,
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which) {
                             case 0:
-                                openGaleri();
+                                openGallery();
                                 break;
                             case 1:
                                 takePhotoFromCamera();
@@ -116,7 +111,7 @@ public class AddCarActivity extends AppCompatActivity {
         pictureDialog.show();
 
     }
-    public void openGaleri(){
+    public void openGallery(){
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
