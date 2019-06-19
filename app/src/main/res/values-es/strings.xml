@@ -43,8 +43,8 @@
     <string name="confirmar_borrar_Message_Dialog">Quiere borrar el vehículo</string>
     <string name="carxml_label_car_name">Nombre del coche:</string>
     <string name="carxml_label_kmOnClock">Kms en el marcador:</string>
-    <string name="carxml_label_on_log">Kms registrados en la app:</string>
-    <string name="carxml_label_totallitres">Litros totales repostados:</string>
+    <string name="carxml_label_on_log">Kms registrados:</string>
+    <string name="carxml_label_totallitres">Litros repostados:</string>
     <string name="carxml_label_euros">Gasto total:</string>
     <string name="carxml_label_Lto100km">L/100km:</string>
     <string name="carxml_label_euros100km">€/100Km:</string>

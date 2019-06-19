@@ -27,6 +27,7 @@ import com.loker.consumvehicle.model.Refill;
 
 import java.io.ByteArrayOutputStream;
 import java.util.List;
+import java.util.Locale;
 
 public class CarsListAdapter extends RecyclerView.Adapter<CarsListAdapter.CarHolder> {
 
@@ -57,12 +58,12 @@ public class CarsListAdapter extends RecyclerView.Adapter<CarsListAdapter.CarHol
         Car car = carList.get(i);
 
         carHolder.tvCarName.setText(car.getCarName());
-        carHolder.tvKmsOnClock.setText(String.valueOf(car.getTotalKm()));
-        carHolder.tvKmsLogged.setText(String.valueOf(car.calcKmsLogged()));
-        carHolder.tvLiters.setText(String.valueOf(car.getTotalLitres(refillList)));
-        carHolder.tvEuros100km.setText(String.valueOf(car.getAVGEuros(refillList)));
-        carHolder.tvEurosTotal.setText(String.valueOf(car.getTotalEuros(refillList)));
-        carHolder.tvLitres100km.setText(String.valueOf(car.getAVGLitres(refillList)));
+        carHolder.tvKmsOnClock.setText(String.format(Locale.US,"%.1f",car.getTotalKm()));
+        carHolder.tvKmsLogged.setText(String.format("%.1f",car.calcKmsLogged()));
+        carHolder.tvLiters.setText(String.format("%.2f",car.getTotalLitres(refillList)));
+        carHolder.tvEuros100km.setText(String.format("%.2f",car.getAVGEuros(refillList)));
+        carHolder.tvEurosTotal.setText(String.format("%.2f",car.getTotalEuros(refillList)));
+        carHolder.tvLitres100km.setText(String.format("%.2f",car.getAVGLitres(refillList)));
 
         if(car.getBitmapImageCar()!=null){
             //carHolder.imageCar.setVisibility(View.VISIBLE);
